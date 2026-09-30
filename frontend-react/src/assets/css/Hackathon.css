@@ -44,11 +44,11 @@ body {
 }
 
 .hackathon-page {
-  --hackathon-header-height: 85px;
+  --hackathon-header-height: var(--header-height, 108px);
   --section-surface: #ffffff;
   --section-tint: #eef5ff;
   --section-tint-soft: #f5f9ff;
-  padding-top: 85px;
+  padding-top: var(--hackathon-header-height);
   color: var(--ink);
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background:
@@ -685,11 +685,6 @@ h2.section-title {
 }
 
 @media (max-width:980px) {
-  .hackathon-page {
-    --hackathon-header-height: 74px;
-    padding-top: 74px;
-  }
-
   .hero {
     padding: 48px 0 24px;
   }
@@ -730,11 +725,6 @@ h2.section-title {
 }
 
 @media (max-width:480px) {
-  .hackathon-page {
-    --hackathon-header-height: 68px;
-    padding-top: 68px;
-  }
-
   .hero {
     padding: 34px 0 10px;
   }
@@ -888,17 +878,18 @@ h2.section-title {
   display: flex;
   align-items: center;
   isolation: isolate;
-  padding: clamp(72px, 6vw, 96px) 0 clamp(108px, 9vw, 150px);
+  padding: 140px 0 clamp(108px, 9vw, 150px);
   background: #02070b;
   color: #fff;
 }
 
+/* Full-hero uniform dark overlay */
 .hackathon-page .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: rgba(0, 0, 0, .55);
+  background: rgba(2, 7, 11, 0.58);
   pointer-events: none;
 }
 
@@ -915,17 +906,24 @@ h2.section-title {
   pointer-events: none;
 }
 
+/* hero-background is now a <picture> element; apply sizing to it and its img child */
 .hero-background {
+  display: block;
   position: absolute;
   inset: 0;
   z-index: 0;
   width: 100%;
   height: 100%;
+  animation: hackathon-hero-background-settle 2.4s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.hero-background img {
+  width: 100%;
+  height: 100%;
   max-width: none;
   object-fit: cover;
   object-position: center 48%;
-  filter: brightness(1.18) saturate(.9) contrast(.98);
-  animation: hackathon-hero-background-settle 2.4s cubic-bezier(.16, 1, .3, 1) both;
+  filter: brightness(1.1) saturate(.9) contrast(.98);
 }
 
 .hackathon-page .hero-inner {
@@ -947,58 +945,108 @@ h2.section-title {
   align-items: center;
 }
 
+.hackathon-page .hero-main {
+  position: relative;
+}
+
+/* Preserve the supplied artwork; feather the backdrop instead of recoloring logos. */
+.hackathon-page .hero-logos {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.35fr) minmax(0, .8fr);
+  align-items: center;
+  gap: clamp(20px, 2.5vw, 32px);
+  width: min(100%, 620px);
+}
+
+.hackathon-page .hero-logos::before {
+  display: none;
+}
+
+.hackathon-page .hero-logos img {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Event name line: "VConnecTech Engineering Marathon" ── */
 .hero-event-name {
   margin: 0;
-  color: #fff;
+  color: rgba(255, 255, 255, .95);
   font-family: 'Space Grotesk', 'Inter', sans-serif;
-  font-size: clamp(24px, 2.2vw, 36px);
-  font-weight: 500;
-  line-height: 1.2;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, .65);
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .7);
   animation: hero-fade-up .65s cubic-bezier(.16, 1, .3, 1) both;
 }
 
-.hero-event-name strong {
-  color: #0b7bf0;
-  background: linear-gradient(135deg, #0b7bf0 0%, #00d2ff 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 500;
-  text-shadow: none;
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, .55));
-}
-
+/* "Engineering" — neutral white, no competition with the star word */
 .hero-event-name strong:first-of-type {
   color: #fff;
   background: none;
   -webkit-text-fill-color: #fff;
+  font-weight: 700;
 }
 
+/* "Marathon" — the focal word: larger, vivid blue, pulsing glow */
+.hero-event-name strong:last-of-type {
+  font-size: 1.25em;                /* 25% bigger than sibling text */
+  font-weight: 800;
+  letter-spacing: .04em;
+  background: linear-gradient(120deg, #2196f3 0%, #42a5f5 45%, #0d8ff5 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter:
+    drop-shadow(0 0 10px rgba(33, 150, 243, .60))
+    drop-shadow(0 2px 6px rgba(0, 0, 0, .50));
+  animation:
+    hero-fade-up .65s cubic-bezier(.16, 1, .3, 1) both,
+    marathon-glow 2.8s 1s ease-in-out infinite;
+}
+
+@keyframes marathon-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px  rgba(33, 150, 243, .55)) drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+     50%    { filter: drop-shadow(0 0 20px rgba(33, 150, 243, .90)) drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+}
+
+/* ── Subtitle ── */
 .hero-audience {
-  margin-top: 10px;
-  color: rgba(255, 255, 255, .76);
-  font-size: clamp(16px, 1.35vw, 21px);
+  margin-top: 8px;
+  color: rgba(255, 255, 255, .70);
+  font-size: clamp(13px, 1.1vw, 17px);
+  letter-spacing: .04em;
   line-height: 1.4;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, .75);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .55);
   animation: hero-fade-up .65s .06s cubic-bezier(.16, 1, .3, 1) both;
 }
 
+/* ── H1 — "One Problem. One Team. Real Impact." ── */
 .hackathon-page .hero h1 {
-  display: flex;
-  flex-direction: column;
-  max-width: 920px;
-  margin-top: clamp(40px, 5vh, 58px);
+  display: block;             /* flex was breaking text-align: center */
+  max-width: 860px;
+  margin: clamp(30px, 4vh, 48px) auto 0;
   color: #fff;
-  font-size: clamp(60px, 6.2vw, 94px);
-  font-weight: 500;
-  letter-spacing: -.055em;
-  line-height: .93;
+  font-size: clamp(56px, 5.8vw, 90px);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.0;
   text-align: center;
-  text-shadow: 0 4px 28px rgba(0, 0, 0, .72);
+  text-shadow: 0 3px 22px rgba(0, 0, 0, .68);
 }
 
 .hackathon-page .hero h1 > span {
+  display: block;
   animation: hackathon-hero-line-reveal .78s cubic-bezier(.16, 1, .3, 1) both;
 }
 
@@ -1068,7 +1116,7 @@ h2.section-title {
   border-right-color: rgba(255, 255, 255, .24);
 }
 
-.hackathon-page .hero .stat > svg {
+.hackathon-page .hero .stat>svg {
   flex: 0 0 auto;
   width: 38px;
   height: 38px;
@@ -1099,35 +1147,74 @@ h2.section-title {
   animation: hackathon-hero-stat-rise .65s cubic-bezier(.16, 1, .3, 1) both;
 }
 
-.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(1) { animation-delay: .08s; }
-.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(2) { animation-delay: .16s; }
-.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(3) { animation-delay: .24s; }
-.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(4) { animation-delay: .32s; }
+.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(1) {
+  animation-delay: .08s;
+}
+
+.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(2) {
+  animation-delay: .16s;
+}
+
+.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(3) {
+  animation-delay: .24s;
+}
+
+.hackathon-page .hero .trace-wrap.reveal.in .stat:nth-child(4) {
+  animation-delay: .32s;
+}
 
 @keyframes hackathon-hero-background-settle {
-  from { transform: scale(1.055); }
-  to { transform: scale(1); }
+  from {
+    transform: scale(1.055);
+  }
+
+  to {
+    transform: scale(1);
+  }
 }
 
 @keyframes hackathon-hero-line-reveal {
-  from { opacity: 0; transform: translateY(30px) scale(.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes hackathon-hero-arrow-nudge {
-  0%, 100% { translate: 0 0; opacity: .72; }
-  50% { translate: 8px 0; opacity: 1; }
+
+  0%,
+  100% {
+    translate: 0 0;
+    opacity: .72;
+  }
+
+  50% {
+    translate: 8px 0;
+    opacity: 1;
+  }
 }
 
 @keyframes hackathon-hero-stat-rise {
-  from { opacity: 0; transform: translateY(22px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 980px) {
   .hackathon-page .hero {
     min-height: auto;
-    padding-top: 72px;
+    padding-top: 140px;
     padding-bottom: 112px;
   }
 
@@ -1153,42 +1240,89 @@ h2.section-title {
 }
 
 @media (max-width: 640px) {
+
+  /* Mobile hero — portrait image, taller section, deeper overlay for sky area */
   .hackathon-page .hero {
-    padding-top: 76px;
-    padding-bottom: 88px;
+    min-height: 100svh;
+    padding-top: 20px;
+    padding-bottom: 100px;
+    align-items: flex-end;
+  }
+
+  /* Push the portrait image so the people are visible, not the empty ceiling */
+  .hero-background img {
+    object-position: center 72%;
+    filter: brightness(0.95) saturate(.88) contrast(1.02);
+  }
+
+  .hackathon-page .hero-logos {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 12px 24px;
+    width: min(100%, 344px);
+    margin-bottom: 24px;
+  }
+
+  .hackathon-page .hero-logos::before {
+    inset: -32px -72px;
+  }
+
+  .hackathon-page .hero-logos .hero-logo-silicon-setu {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 132px;
   }
 
   .hackathon-page .hero-inner {
     width: calc(100% - 36px);
   }
 
+  /* Brighter, sharper text so it pops on the darker lower half */
   .hero-event-name {
     font-size: 22px;
+    color: #ffffff;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, .85);
   }
 
   .hero-audience {
     font-size: 16px;
+    color: rgba(255, 255, 255, .90);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, .90);
   }
 
   .hackathon-page .hero h1 {
-    margin-top: 34px;
-    font-size: clamp(44px, 14vw, 62px);
+    margin-top: 28px;
+    font-size: clamp(42px, 13vw, 60px);
     line-height: .98;
+    color: #ffffff;
+    text-shadow: 0 4px 32px rgba(0, 0, 0, .88);
   }
 
   .hackathon-page .hero .lede {
     font-size: 15px;
+    color: rgba(255, 255, 255, .92);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, .90);
   }
 
   .hero-flow {
     flex-direction: column;
     gap: 8px;
-    margin-top: 30px;
+    margin-top: 26px;
+    color: rgba(255, 255, 255, .95);
   }
 
   .hero-flow svg {
     width: 30px;
     transform: rotate(90deg);
+  }
+
+  /* Stats bar — slightly more opaque on mobile */
+  .hackathon-page .hero .trace-wrap {
+    background: rgba(0, 8, 13, .62);
+    backdrop-filter: blur(8px);
   }
 
   .hackathon-page .hero .stats-strip {
@@ -1197,13 +1331,21 @@ h2.section-title {
 
   .hackathon-page .hero .stat,
   .hackathon-page .hero .stat:nth-child(2) {
-    min-height: 82px;
+    min-height: 76px;
     border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, .2);
+    border-bottom: 1px solid rgba(255, 255, 255, .22);
   }
 
   .hackathon-page .hero .stat:last-child {
     border-bottom: 0;
+  }
+
+  .hackathon-page .hero .stat .lbl {
+    color: rgba(255, 255, 255, .75);
+  }
+
+  .hackathon-page .hero .stat .num {
+    color: #ffffff;
   }
 }
 
@@ -4013,12 +4155,12 @@ h2.section-title {
   text-align: center;
 }
 
-.build-showcase-heading > div {
+.build-showcase-heading>div {
   width: 100%;
   text-align: center;
 }
 
-.build-showcase-heading > div > p {
+.build-showcase-heading>div>p {
   margin: 0;
   color: #087bea;
   font-family: 'Space Grotesk', 'Inter', sans-serif;
@@ -4158,22 +4300,50 @@ h2.section-title {
   animation: build-endpoint-lock .38s cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
-.build-showcase-connectors path:nth-of-type(1) { animation-delay: .54s; }
-.build-showcase-connectors path:nth-of-type(2) { animation-delay: .64s; }
-.build-showcase-connectors path:nth-of-type(3) { animation-delay: .74s; }
-.build-showcase-connectors path:nth-of-type(4) { animation-delay: .84s; }
-.build-showcase-connectors path:nth-of-type(5) { animation-delay: .94s; }
+.build-showcase-connectors path:nth-of-type(1) {
+  animation-delay: .54s;
+}
+
+.build-showcase-connectors path:nth-of-type(2) {
+  animation-delay: .64s;
+}
+
+.build-showcase-connectors path:nth-of-type(3) {
+  animation-delay: .74s;
+}
+
+.build-showcase-connectors path:nth-of-type(4) {
+  animation-delay: .84s;
+}
+
+.build-showcase-connectors path:nth-of-type(5) {
+  animation-delay: .94s;
+}
 
 .build-showcase-connectors circle:nth-of-type(1),
-.build-showcase-connectors circle:nth-of-type(2) { animation-delay: 1.2s; }
+.build-showcase-connectors circle:nth-of-type(2) {
+  animation-delay: 1.2s;
+}
+
 .build-showcase-connectors circle:nth-of-type(3),
-.build-showcase-connectors circle:nth-of-type(4) { animation-delay: 1.3s; }
+.build-showcase-connectors circle:nth-of-type(4) {
+  animation-delay: 1.3s;
+}
+
 .build-showcase-connectors circle:nth-of-type(5),
-.build-showcase-connectors circle:nth-of-type(6) { animation-delay: 1.4s; }
+.build-showcase-connectors circle:nth-of-type(6) {
+  animation-delay: 1.4s;
+}
+
 .build-showcase-connectors circle:nth-of-type(7),
-.build-showcase-connectors circle:nth-of-type(8) { animation-delay: 1.5s; }
+.build-showcase-connectors circle:nth-of-type(8) {
+  animation-delay: 1.5s;
+}
+
 .build-showcase-connectors circle:nth-of-type(9),
-.build-showcase-connectors circle:nth-of-type(10) { animation-delay: 1.6s; }
+.build-showcase-connectors circle:nth-of-type(10) {
+  animation-delay: 1.6s;
+}
 
 .build-showcase-callouts {
   position: absolute;
@@ -4213,44 +4383,136 @@ h2.section-title {
   font-weight: 800;
 }
 
-.build-showcase-callout--idea { top: 3.9%; left: 4.75%; transform: translate3d(240px, 90px, 0) scale(.38) rotate(4deg); animation-delay: .72s; }
-.build-showcase-callout--architecture { top: 43.8%; left: 4.1%; transform: translate3d(225px, -16px, 0) scale(.38) rotate(-3deg); animation-delay: .82s; }
-.build-showcase-callout--design { top: 68.4%; left: 27.6%; transform: translate3d(150px, -58px, 0) scale(.38) rotate(3deg); animation-delay: .92s; }
-.build-showcase-callout--prototype { top: 3.9%; right: 6.95%; transform: translate3d(-225px, 94px, 0) scale(.38) rotate(-4deg); animation-delay: 1.02s; }
-.build-showcase-callout--impact { top: 43.5%; right: 7.5%; transform: translate3d(-215px, -12px, 0) scale(.38) rotate(3deg); animation-delay: 1.12s; }
+.build-showcase-callout--idea {
+  top: 3.9%;
+  left: 4.75%;
+  transform: translate3d(240px, 90px, 0) scale(.38) rotate(4deg);
+  animation-delay: .72s;
+}
+
+.build-showcase-callout--architecture {
+  top: 43.8%;
+  left: 4.1%;
+  transform: translate3d(225px, -16px, 0) scale(.38) rotate(-3deg);
+  animation-delay: .82s;
+}
+
+.build-showcase-callout--design {
+  top: 68.4%;
+  left: 27.6%;
+  transform: translate3d(150px, -58px, 0) scale(.38) rotate(3deg);
+  animation-delay: .92s;
+}
+
+.build-showcase-callout--prototype {
+  top: 3.9%;
+  right: 6.95%;
+  transform: translate3d(-225px, 94px, 0) scale(.38) rotate(-4deg);
+  animation-delay: 1.02s;
+}
+
+.build-showcase-callout--impact {
+  top: 43.5%;
+  right: 7.5%;
+  transform: translate3d(-215px, -12px, 0) scale(.38) rotate(3deg);
+  animation-delay: 1.12s;
+}
 
 @keyframes build-heading-calibrate {
-  0% { opacity: 0; clip-path: inset(0 50% 0 50%); transform: translateY(-8px) scale(.96); }
-  62% { opacity: 1; clip-path: inset(0); transform: translateY(2px) scale(1.008); }
-  100% { opacity: 1; clip-path: inset(0); transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    clip-path: inset(0 50% 0 50%);
+    transform: translateY(-8px) scale(.96);
+  }
+
+  62% {
+    opacity: 1;
+    clip-path: inset(0);
+    transform: translateY(2px) scale(1.008);
+  }
+
+  100% {
+    opacity: 1;
+    clip-path: inset(0);
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes build-product-assemble {
-  0% { opacity: 0; clip-path: inset(44% 42% 44% 42% round 30px); filter: blur(10px) saturate(.72) brightness(1.08); transform: scale(.92); }
-  42% { opacity: 1; filter: blur(3px) saturate(.9) brightness(1.04); }
-  76% { clip-path: inset(0 round 0); transform: scale(1.012); }
-  100% { opacity: 1; clip-path: inset(0 round 0); filter: blur(0) saturate(1) brightness(1); transform: scale(1); }
+  0% {
+    opacity: 0;
+    clip-path: inset(44% 42% 44% 42% round 30px);
+    filter: blur(10px) saturate(.72) brightness(1.08);
+    transform: scale(.92);
+  }
+
+  42% {
+    opacity: 1;
+    filter: blur(3px) saturate(.9) brightness(1.04);
+  }
+
+  76% {
+    clip-path: inset(0 round 0);
+    transform: scale(1.012);
+  }
+
+  100% {
+    opacity: 1;
+    clip-path: inset(0 round 0);
+    filter: blur(0) saturate(1) brightness(1);
+    transform: scale(1);
+  }
 }
 
 @keyframes build-connector-route {
-  from { stroke-dashoffset: -1; }
-  to { stroke-dashoffset: 0; }
+  from {
+    stroke-dashoffset: -1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes build-endpoint-lock {
-  0% { opacity: 0; transform: scale(0); }
-  62% { opacity: 1; transform: scale(1.7); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  62% {
+    opacity: 1;
+    transform: scale(1.7);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes build-card-deploy {
-  0% { opacity: 0; }
-  54% { opacity: 1; }
-  78% { opacity: 1; transform: translate3d(0, 0, 0) scale(1.035) rotate(0); }
-  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(0); }
+  0% {
+    opacity: 0;
+  }
+
+  54% {
+    opacity: 1;
+  }
+
+  78% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1.035) rotate(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .build-showcase-visual.reveal .build-showcase-heading,
   .build-showcase-main-image,
   .build-showcase-callout,
@@ -4526,11 +4788,12 @@ h2.section-title {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 36px 24px;
-  border-radius: 28px;
+  padding: 22px 28px 18px;
+  border-radius: 24px;
   background: #ffffff;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   border: 3px solid rgba(255, 255, 255, 0.95);
+  text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -4539,11 +4802,23 @@ h2.section-title {
   box-shadow: 0 32px 70px rgba(0, 0, 0, 0.45);
 }
 
+.qr-img-wrapper {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  overflow: hidden;
+}
+
 .qr-img-wrapper img,
 .qr-img-wrapper svg {
-  width: 220px;
-  height: 220px;
+  width: 380px;
+  height: 380px;
+  max-width: none;
   display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   object-fit: contain;
 }
 
@@ -4551,7 +4826,7 @@ h2.section-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 12px;
   padding: 8px 18px;
   border-radius: 999px;
   background: #f0f6ff;
@@ -5088,7 +5363,7 @@ h2.section-title {
     transform: translate(0, 0);
   }
 
-  .engineering-showcase__mobile > h2 {
+  .engineering-showcase__mobile>h2 {
     margin: 0;
     color: #062653;
     font-family: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -5098,11 +5373,11 @@ h2.section-title {
     line-height: .98;
   }
 
-  .engineering-showcase__mobile > h2 span {
+  .engineering-showcase__mobile>h2 span {
     color: #087df2;
   }
 
-  .engineering-showcase__mobile > p {
+  .engineering-showcase__mobile>p {
     margin: -8px 0 10px;
     color: #062653;
     font-size: 1.05rem;
@@ -5118,7 +5393,7 @@ h2.section-title {
     isolation: isolate;
   }
 
-  .engineering-showcase__mobile article > img {
+  .engineering-showcase__mobile article>img {
     position: absolute;
     inset: 0;
     z-index: -2;
@@ -5204,6 +5479,7 @@ h2.section-title {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .engineering-showcase .engineering-showcase__animate,
   .engineering-showcase .engineering-showcase__ribbon {
     opacity: 1 !important;
@@ -5451,6 +5727,7 @@ h2.section-title {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .engineering-capability-card,
   .engineering-capabilities__heading {
     opacity: 1;
