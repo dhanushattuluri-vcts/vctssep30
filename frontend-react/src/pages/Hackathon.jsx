@@ -167,7 +167,7 @@ function HeroStats() {
         </div>
         <div className="stat">
           <CalendarDays aria-hidden="true" />
-          <div><div className="lbl">Registration closes</div><div className="num">September 30</div></div>
+          <div><div className="lbl">Registration closes</div><div className="num">October 15</div></div>
         </div>
       </div>
     </div>
@@ -218,7 +218,7 @@ function AboutSection() {
             <p className="about-tagline">From concept to real-world impact.</p>
 
             <p className="about-lede">
-              The VConnecTech Engineering Marathon is an open innovation program where individuals submit ideas and selected teams turn them into real, working prototypes. We provide the tools, infrastructure, expert guidance, and ecosystem support to help you build from concept to demo in roughly three months, from the September 30 registration deadline to final demos on December 10–20.
+              The VConnecTech Engineering Marathon is an open innovation program where individuals submit ideas and selected teams turn them into real, working prototypes. We provide the tools, infrastructure, expert guidance, and ecosystem support to help you build from concept to demo in roughly three months, from the October 15 registration deadline to final demos after December 16.
             </p>
 
             <div className="about-cards-grid">
@@ -444,13 +444,13 @@ function DomainsSection() {
 // ==========================================
 
 const steps = [
-  { num: '01', label: 'Registration & Idea Submission', date: 'Due September 30', desc: 'Submit your problem, solution, concept, and expected impact.', icon: 'abstract', left: '6%', top: '84%', iconTop: '71%' },
-  { num: '02', label: 'Shortlist Announced', date: 'October 10', desc: 'Ideas are evaluated for value, feasibility, innovation, and impact. Shortlisted teams advance to the detailed proposal round.', icon: 'report', left: '20%', top: '74%', iconTop: '61%' },
-  { num: '03', label: 'Detailed Proposal Development', date: 'October 10 – November 10', desc: 'Develop and present your technical architecture, implementation plan, resources, and business case to the jury.', icon: 'presentation', left: '32%', top: '66%', iconTop: '53%' },
-  { num: '04', label: 'Implementation Shortlist', date: 'Around November 10', desc: 'The jury selects the top 20 teams to advance to implementation.', icon: 'bootcamp', left: '45%', top: '56%', iconTop: '43%' },
-  { num: '05', label: 'Implementation & Hardware Demo Build', date: 'November 10 – December 10', desc: 'Build, integrate, test, and validate a working hardware demo during one month of hands-on development.', icon: 'prototype', left: '60%', top: '46%', iconTop: '33%' },
-  { num: '06', label: 'Final Demo', date: 'December 10–20', desc: 'Present a live demo for engineering, product, business, and jury validation.', icon: 'demo', left: '76%', top: '32%', iconTop: '19%' },
-  { num: '07', label: 'Recognition & Next Steps', date: 'December 10–20', desc: 'Winner announced at Demo Day, with recognition and potential opportunities for top performers.', icon: 'hired', left: '88%', top: '20%', final: true },
+  { num: '01', label: 'Registration & Idea Submission', date: 'October 1 – October 15', desc: 'Submit your problem, solution, concept, and expected impact.', icon: 'abstract', left: '6%', top: '84%', iconTop: '71%' },
+  { num: '02', label: 'Shortlist Announced', date: 'October 16', desc: 'Ideas are evaluated for value, feasibility, innovation, and impact. Shortlisted teams advance to the detailed proposal round.', icon: 'report', left: '20%', top: '74%', iconTop: '61%' },
+  { num: '03', label: 'Detailed Proposal Development', date: 'October 16 – November 15', desc: 'Develop and present your technical architecture, implementation plan, resources, and business case to the jury.', icon: 'presentation', left: '32%', top: '66%', iconTop: '53%' },
+  { num: '04', label: 'Implementation Shortlist', date: 'Around November 16', desc: 'The jury selects the top 20 teams to advance to implementation.', icon: 'bootcamp', left: '45%', top: '56%', iconTop: '43%' },
+  { num: '05', label: 'Implementation & Hardware Demo Build', date: 'November 16 – December 15', desc: 'Build, integrate, test, and validate a working hardware demo during one month of hands-on development.', icon: 'prototype', left: '60%', top: '46%', iconTop: '33%' },
+  { num: '06', label: 'Final Demo', date: 'Post December 16. Dates and venue will be announced soon.', desc: 'Present a live demo for engineering, product, business, and jury validation.', icon: 'demo', left: '76%', top: '32%', iconTop: '19%' },
+  { num: '07', label: 'Recognition & Next Steps', date: 'Post December 16', desc: 'Winner announced at Demo Day, with recognition and potential opportunities for top performers.', icon: 'hired', left: '88%', top: '20%', final: true },
 ]
 
 const summary = [
@@ -517,7 +517,7 @@ function JourneySection() {
       <div className="wrap">
         <h2 className="section-title reveal">Your <span className="title-hl">Journey</span></h2>
         <p className="section-tagline reveal">One problem. One team. Real impact.</p>
-        <p className="lede reveal">Register by September 30, develop your detailed proposal from October 10 to November 10, build from November 10 to December 10, and present your final demo on December 10–20.</p>
+        <p className="lede reveal">Register by October 15, develop your detailed proposal from October 16 to November 15, build from November 16 to December 15, and present your final demo after December 16.</p>
 
         <div className="journey-layout" style={{ marginTop: '40px' }}>
           <div className="journey-copy">
@@ -966,7 +966,7 @@ function RegisterSection() {
                 Ready to <span className="register-title-hl">build the future?</span>
               </h2>
               <p className="register-lede">
-                Bring your idea. Join the Engineering Marathon. Let’s engineer impact together. Registration &amp; Idea Submission closes September 30.
+                Bring your idea. Join the Engineering Marathon. Let’s engineer impact together. Registration &amp; Idea Submission closes October 15.
               </p>
 
 
